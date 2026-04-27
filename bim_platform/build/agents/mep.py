@@ -17,7 +17,9 @@ Output a single MEPStrategy JSON:
 {
   "hvac_type": "<string>",
   "hvac_zones": <int>,
-  "zones": [],
+  "zones": [
+    {"name": "<zone label>", "floors": ["<floor name>", ...], "spaces": ["<space name>", ...]}
+],
   "equipment_location": "<space name from layout, or area like 'rooftop'>",
   "hot_water": "tank_electric" | "tank_gas" | "tankless_electric" | "tankless_gas" | "central_heat_pump",
   "plumbing_chase_locations": [...space names where plumbing risers run...],
