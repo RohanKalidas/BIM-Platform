@@ -7,6 +7,10 @@ from .compliance import ComplianceReport, CheckResult, CheckStatus
 from .structural import StructuralStrategy, GridLine, Column
 from .building_spec import BuildingSpec
 from .pipeline import AgentRun, PipelineResult
+from .pascal_scene import (
+    PascalNode, PascalScene, SiteNode, BuildingNode, LevelNode,
+    WallNode, SlabNode, CeilingNode, RoofNode, ItemNode, ZoneNode,
+)
 
 __all__ = [
     "Brief", "ProgramItem",
@@ -17,4 +21,6 @@ __all__ = [
     "StructuralStrategy", "GridLine", "Column",
     "BuildingSpec",
     "AgentRun", "PipelineResult",
+    "PascalNode", "PascalScene", "SiteNode", "BuildingNode", "LevelNode",
+    "WallNode", "SlabNode", "CeilingNode", "RoofNode", "ItemNode", "ZoneNode",
 ]
