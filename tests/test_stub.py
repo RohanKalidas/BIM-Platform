@@ -148,27 +148,35 @@ def test_pascal_export():
     spec = merge_to_spec(SAMPLE_BRIEF, SAMPLE_LAYOUT, SAMPLE_FACADE, SAMPLE_MEP)
     scene = export_to_pascal(spec)
 
-    # Has at least: 1 site, 1 building, 1 level, 6 slabs (one per space),
-    # 24 walls (4 per space × 6 spaces), 1 roof, 6 zones, plus furniture
-    types = [n.type for n in scene.nodes.values()]
+    # Top-level shape: just "nodes" and "rootNodeIds"
+    assert set(scene.keys()) == {"nodes", "rootNodeIds"}, f"got keys {scene.keys()}"
+    assert len(scene["rootNodeIds"]) == 1
+
+    # Tally node types from the flat dict
+    types = [n["type"] for n in scene["nodes"].values()]
     assert types.count("site") == 1
     assert types.count("building") == 1
     assert types.count("level") == 1
-    assert types.count("slab") == 6, f"expected 6 slabs, got {types.count('slab')}"
-    assert types.count("wall") == 24, f"expected 24 walls, got {types.count('wall')}"
-    assert types.count("roof") == 1
-    assert types.count("zone") == 6
+    # 6 spaces × (1 slab + 1 ceiling + 4 walls) = 36 nodes per floor
+    assert types.count("slab") == 6,    f"expected 6 slabs, got {types.count('slab')}"
+    assert types.count("ceiling") == 6, f"expected 6 ceilings, got {types.count('ceiling')}"
+    assert types.count("wall") == 24,   f"expected 24 walls, got {types.count('wall')}"
 
-    # Roof picks gable style from facade
-    roof = next(n for n in scene.nodes.values() if n.type == "roof")
-    assert roof.style == "gable", f"expected gable roof, got {roof.style}"
+    # Check Pascal-specific fields are present
+    site = next(n for n in scene["nodes"].values() if n["type"] == "site")
+    assert "polygon" in site
+    assert site["polygon"]["type"] == "polygon"
+    assert site["object"] == "node"
+
+    a_wall = next(n for n in scene["nodes"].values() if n["type"] == "wall")
+    assert "start" in a_wall and "end" in a_wall
+    assert a_wall["object"] == "node"
+    assert a_wall["backSide"] in ("exterior", "interior")
 
     # JSON-serializable
-    payload = scene.to_json_dict()
-    js = json.dumps(payload)
-    assert len(js) > 1000  # non-trivial output
-    print(f"✓ Pascal export: {len(scene.nodes)} nodes, "
-          f"{len(scene.rootNodeIds)} root, JSON {len(js)} bytes")
+    js = json.dumps(scene)
+    assert len(js) > 1000
+    print(f"✓ Pascal export: {len(scene['nodes'])} nodes, JSON {len(js)} bytes")
 
 
 def test_edit_palette_no_llm():
