@@ -13,6 +13,12 @@ from ...schemas.pipeline import AgentRun
 MEP_PROMPT = """You are the MEP Agent. Pick mechanical/electrical/plumbing systems
 that match the typology, climate, and floor area in the Brief.
 
+ZONE RULES:
+- Each zone needs a "name" plus EITHER "floors" (which floors it serves)
+  OR "spaces" (specific space names) or both.
+- Use floor names from layout.floors[].name (e.g., "Ground", "Upper").
+- Use space names from layout.floors[].spaces[].name (e.g., "Living Room").
+
 Output a single MEPStrategy JSON:
 {
   "hvac_type": "<string>",
