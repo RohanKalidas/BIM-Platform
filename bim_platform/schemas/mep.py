@@ -16,11 +16,10 @@ from pydantic import BaseModel, Field
 class MEPZone(BaseModel):
     """One thermal/control zone in the building."""
     name: str
-    floors: list[str]   # which floors this zone serves (by Floor.name)
-    spaces: list[str] = Field(default_factory=list)  # specific spaces (empty = all on the floors)
+    floors: list[str] = Field(default_factory=list)   # which floors this zone serves (by Floor.name)
+    spaces: list[str] = Field(default_factory=list)   # specific spaces (empty = all on the floors)
     setpoint_heat_c: float = 21.0
     setpoint_cool_c: float = 24.0
-
 
 class MEPStrategy(BaseModel):
     """The MEP Agent's output — system selections + equipment locations."""
