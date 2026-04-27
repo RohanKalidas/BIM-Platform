@@ -98,7 +98,7 @@ def _call_agent(
     label: str,
     *,
     model: str = SPECIALIST_MODEL,
-    max_tokens: int = 4000,
+    max_tokens: int = 8000,
     max_retries: int = 1,
 ) -> tuple[T, AgentRun]:
     """
