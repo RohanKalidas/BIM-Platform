@@ -69,10 +69,10 @@ def cmd_generate(args: argparse.Namespace) -> int:
     if args.pascal:
         scene = export_to_pascal(result.spec)
         scene_path = Path(args.pascal)
-        scene_path.write_text(json.dumps(scene.to_json_dict(), indent=2))
-        n_nodes = len(scene.nodes)
+        scene_path.write_text(json.dumps(scene, indent=2))
+        n_nodes = len(scene["nodes"])
         print(f"→ Pascal scene ({n_nodes} nodes) written to {scene_path}")
-        print("  Import this JSON in Pascal Editor (https://pascaleditor.app or your local instance)")
+        print("  Open Pascal Editor → settings menu → Load Build, pick this file")
 
     return 0
 
@@ -91,7 +91,7 @@ def cmd_edit(args: argparse.Namespace) -> int:
         print(f"\n→ Updated PipelineResult written to {args.out}")
     if args.pascal:
         scene = export_to_pascal(result.spec)
-        Path(args.pascal).write_text(json.dumps(scene.to_json_dict(), indent=2))
+        Path(args.pascal).write_text(json.dumps(scene, indent=2))
         print(f"→ Pascal scene written to {args.pascal}")
     return 0
 
@@ -102,7 +102,7 @@ def cmd_export(args: argparse.Namespace) -> int:
 
     if args.format == "pascal":
         scene = export_to_pascal(prev.spec)
-        out = json.dumps(scene.to_json_dict(), indent=2)
+        out = json.dumps(scene, indent=2)
     elif args.format == "spec":
         out = prev.spec.model_dump_json(indent=2)
     else:
