@@ -209,4 +209,27 @@ A few things deliberately excluded:
 
 ## Status
 
-Phase 0 in progress. Most recent commit: initial schema design.
+**Checkpoint 2 (current).** Backend MAS pipeline complete and tested offline.
+What works end-to-end:
+
+- `bim generate "<prompt>"` runs Brief → Layout-Validator → (Facade ‖ MEP)
+  → merge → BuildingSpec
+- `--pascal <path>` exports BuildingSpec to a Pascal Editor scene JSON
+  (importable via Pascal's JSON import)
+- `--out <path>` writes the full PipelineResult for later editing
+- `bim edit <prev.json> "<request>" --target <t>` runs surgical edits
+  with optional `--cascade`. Six targets:
+    * `palette` — instant, no LLM call
+    * `materials` — palette + facade-feature material tweaks
+    * `facade`, `mep`, `layout`, `brief` — re-run that specialist only
+- 7/7 offline tests pass. No API calls in tests.
+
+**Renderer pivot — Pascal as the primary target.** This checkpoint targets
+[Pascal Editor](https://github.com/pascalorg/editor) (MIT-licensed) as the
+3D rendering substrate. The MAS produces typology-agnostic `BuildingSpec`,
+the exporter converts to Pascal node JSON, Pascal's viewer renders. IFC
+export is a future second exporter for architectural deliverable.
+
+**Next (checkpoint 3).** Flask API server wrapping the orchestrator;
+Next.js frontend with embedded Pascal viewer. Then IFC export. Then
+Compliance + Structural agents. Then Translate phase. Then Design phase.
